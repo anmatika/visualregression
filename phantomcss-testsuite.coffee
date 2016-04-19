@@ -32,8 +32,15 @@ casper.test.begin 'Budgeting visual tests', (test) ->
           phantomcss.screenshot '#navigationMenu', 'navigation menu'
       ), ->
            casper.test.fail 'Should see navigation menu'
+           
+    casper.then ->
+      casper.click 'a[href$=Budgeting]'
+      casper.waitForText 'Manage budgets', (->
+        phantomcss.screenshot '.budgetFrames', 'budget frames'
+      ), ->
+        casper.test.fail 'should see budget frames'
 
-    casper.then -> 
+    casper.then ->
        #compare screenshots
        phantomcss.compareAll()
 
