@@ -1,0 +1,74 @@
+fs = require( 'fs' )
+phantomcss = require( '../node_modules/phantomcss' )
+
+casper.test.begin 'Budgeting visual tests', (test) ->
+  #phantomcss.init
+    #rebase: casper.cli.get('rebase')
+    #casper: casper
+	#libraryRoot: fs.absolute(fs.workingDirectory + '')
+	#libraryRoot: fs.absolute('./../node_modules/phantomcss')
+    screenshotRoot: fs.absolute(fs.workingDirectory + '/screenshots')
+    failedComparisonsRoot: fs.absolute(fs.workingDirectory + '/failures')
+    #addLabelToFailedImage: false
+  casper.on 'remote.message', (msg) ->
+    @echo msg
+    return
+  casper.on 'error', (err) ->
+    @die 'PhantomJS has errored: ' + err
+    return
+  casper.on 'resource.error', (err) ->
+    casper.log 'Resource load error: ' + err, 'warning'
+    return
+
+  casper.start 'http://sievo082.sievofi.local:55555/AnttiM'
+  casper.viewport 1024, 768
+
+  casper.then ->
+    phantomcss.screenshot '#login-logo', 'login logo'
+    return
+
+  casper.then ->
+    casper.click '#coffee-machine-button'
+    # wait for modal to fade-in
+    casper.waitForSelector '#myModal:not([style*="display: none"])', (->
+      phantomcss.screenshot '#myModal', 'coffee machine dialog'
+      return
+    ), ->
+      casper.test.fail 'Should see coffee machine'
+      return
+    return
+
+  casper.then ->
+    casper.click '#cappuccino-button'
+    phantomcss.screenshot '#myModal', 'cappuccino success'
+	
+  casper.then ->
+    casper.click '#close'
+    # wait for modal to fade-out
+    casper.waitForSelector '#myModal[style*="display: none"]', (->
+      phantomcss.screenshot
+        'Coffee machine close success':
+          selector: '#coffee-machine-wrapper'
+          ignore: '.selector'
+        'Coffee machine button success': '#coffee-machine-button'
+      return
+    ), ->
+      casper.test.fail 'Should be able to walk away from the coffee machine'
+      return
+    return
+
+  casper.then ->
+    # compare screenshots
+    phantomcss.compareAll()
+    return
+
+  ###
+  Casper runs tests
+  ###
+
+  casper.run ->
+    console.log '\nTHE END.'
+    # phantomcss.getExitStatus() // pass or fail?
+    casper.test.done()
+    return
+  return
