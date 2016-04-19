@@ -28,7 +28,7 @@ casper.test.begin 'Budgeting visual tests', (test) ->
       casper.sendKeys('#UserName', 'anttim')
       casper.sendKeys('#Password', 'anttim')
       casper.click '#loginButton'
-      casper.waitForSelector '#logoutButton', (->
+      casper.waitForSelector '#navigationMenu', (->
           phantomcss.screenshot '#navigationMenu', 'navigation menu'
       ), ->
            casper.test.fail 'Should see navigation menu'
@@ -40,6 +40,14 @@ casper.test.begin 'Budgeting visual tests', (test) ->
       ), ->
         casper.test.fail 'should see budget frames'
 
+    casper.then ->
+      casper.click '#label-year-2016 a'
+      casper.waitForText 'New budget round', (->
+        phantomcss.screenshot '#new-budgetround-panel', 'new budget round panel'
+      ), ->
+        casper.test.fail 'should see new budget round panel'
+
+    
     casper.then ->
        #compare screenshots
        phantomcss.compareAll()

@@ -38,7 +38,7 @@
       casper.sendKeys('#UserName', 'anttim');
       casper.sendKeys('#Password', 'anttim');
       casper.click('#loginButton');
-      return casper.waitForSelector('#logoutButton', (function() {
+      return casper.waitForSelector('#navigationMenu', (function() {
         return phantomcss.screenshot('#navigationMenu', 'navigation menu');
       }), function() {
         return casper.test.fail('Should see navigation menu');
@@ -50,6 +50,14 @@
         return phantomcss.screenshot('.budgetFrames', 'budget frames');
       }), function() {
         return casper.test.fail('should see budget frames');
+      });
+    });
+    casper.then(function() {
+      casper.click('#label-year-2016 a');
+      return casper.waitForText('New budget round', (function() {
+        return phantomcss.screenshot('#new-budgetround-panel', 'new budget round panel');
+      }), function() {
+        return casper.test.fail('should see new budget round panel');
       });
     });
     casper.then(function() {
