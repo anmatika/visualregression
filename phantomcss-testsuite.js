@@ -4,11 +4,11 @@
 
   fs = require('fs');
 
-  phantomcss = require('../node_modules/phantomcss');
+  phantomcss = require('../../sievo.ppm/node_modules/phantomcss');
 
   casper.test.begin('Budgeting visual tests', function(test) {
     phantomcss.init({
-      libraryRoot: '../node_modules/phantomcss',
+      libraryRoot: '../../sievo.ppm/node_modules/phantomcss',
       screenshotRoot: fs.absolute(fs.workingDirectory + '/screenshots'),
       failedComparisonsRoot: fs.absolute(fs.workingDirectory + '/failures')
     });
