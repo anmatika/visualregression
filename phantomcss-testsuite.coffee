@@ -1,5 +1,5 @@
-fs = require('fs')
 phantomcss = require('../../sievo.ppm/node_modules/phantomcss')
+login = require('./sievo.login')
 
 casper.test.begin 'Budgeting visual tests', (test) ->
     phantomcss.init
@@ -12,27 +12,6 @@ casper.test.begin 'Budgeting visual tests', (test) ->
     casper.on 'resource.error', (err) ->
        casper.log 'Resource load error: ' + err, 'warning'
 
-    casper.start 'http://sievo082.sievofi.local:55555/AnttiM'
-    casper.viewport 1024, 768
-    casper.then ->
-    	phantomcss.screenshot '#login-logo', 'login logo'
-
-    casper.then ->
-      casper.click '#loginButton'
-      casper.waitForSelector '.message', (->
-    	  phantomcss.screenshot '.message', 'error message span'
-      ), ->
-    	  casper.test.fail 'Should see error message'
-
-    casper.then ->
-      casper.sendKeys('#UserName', 'anttim')
-      casper.sendKeys('#Password', 'anttim')
-      casper.click '#loginButton'
-      casper.waitForSelector '#navigationMenu', (->
-          phantomcss.screenshot '#navigationMenu', 'navigation menu'
-      ), ->
-           casper.test.fail 'Should see navigation menu'
-           
     casper.then ->
       casper.click 'a[href$=Budgeting]'
       casper.waitForText 'Manage budgets', (->
@@ -47,7 +26,6 @@ casper.test.begin 'Budgeting visual tests', (test) ->
       ), ->
         casper.test.fail 'should see new budget round panel'
 
-    
     casper.then ->
        #compare screenshots
        phantomcss.compareAll()
