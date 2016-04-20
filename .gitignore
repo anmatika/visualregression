@@ -1,0 +1,4 @@
+failures
+screenshots
+*.js
+node_modules
