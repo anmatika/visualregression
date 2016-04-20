@@ -1,7 +1,7 @@
 # path = require('path')
 # process = require('process')
 # root = casper.cli.get('root')
-paths = require('./sievo.module-paths')
+paths = require('./common/sievo.module-paths')
 phantomcss = require('phantomcss')
 InitModule = require(paths.sievoInit)
 LoginModule = require(paths.sievoLogin)
