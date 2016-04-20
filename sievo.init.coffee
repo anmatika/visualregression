@@ -4,7 +4,7 @@ phantomcss = require(paths.phantomCss)
 class Init
     init: ()->
         phantomcss.init
-            libraryRoot: paths.phantomCss
+            # libraryRoot: 'phantomcss'
             screenshotRoot: fs.absolute(fs.workingDirectory + '/screenshots')
             failedComparisonsRoot: fs.absolute(fs.workingDirectory + '/failures')
 
