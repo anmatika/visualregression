@@ -7,7 +7,7 @@ exports.init = ->
         screenshotRoot: fs.absolute(fs.workingDirectory + '/screenshots')
         failedComparisonsRoot: fs.absolute(fs.workingDirectory + '/failures')
 
-    casper.on 'remote.message', (msg) -> @echo msg
+    casper.on 'remote.message', (msg) -> @echo 'remote.message: ' + msg
     casper.on 'step.complete', (stepResult) -> @echo stepResult if stepResult
     #casper.on 'onComplete', (allTests, noOfFails, noOfErrors) ->
       #allTests.forEach (test) ->

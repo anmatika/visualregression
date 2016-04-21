@@ -13,7 +13,7 @@
       failedComparisonsRoot: fs.absolute(fs.workingDirectory + '/failures')
     });
     casper.on('remote.message', function(msg) {
-      return this.echo(msg);
+      return this.echo('remote.message: ' + msg);
     });
     casper.on('step.complete', function(stepResult) {
       if (stepResult) {

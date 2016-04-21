@@ -28,21 +28,35 @@
     });
   };
 
+  casper.captureEditContract = function() {
+    return this.waitForResource(/dimension\/getEntitiesOnLevel/, function() {
+      return phantomcss.screenshot('section[ng-controller="EditContractController as main"]', 'contracts editContractController');
+    }, function() {
+      return this.test.fail('should see edit contract');
+    });
+  };
+
   casper.test.begin('contracs visual tests', function(test) {
     initmodule.init();
     loginmodule.login();
     debug.enableClickListener();
     casper.then(function() {
-      return casper.click('a[href$=Contracts]');
+      return this.click('a[href$=Contracts]');
     });
     casper.then(function() {
       return this.captureContractsMain();
     });
     casper.then(function() {
-      return casper.click('#contract0');
+      return this.click('#contract0');
     });
     casper.then(function() {
       return this.captureContractDetail();
+    });
+    casper.then(function() {
+      return this.click('#action-edit-contract');
+    });
+    casper.then(function() {
+      return this.captureEditContract();
     });
     casper.then(function() {
       return phantomcss.compareSession();
