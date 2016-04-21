@@ -1,45 +1,42 @@
-# path = require('path')
-# process = require('process')
-# root = casper.cli.get('root')
 paths = require('./common/sievo.module-paths')
-phantomcss = require('phantomcss')
-InitModule = require(paths.sievoInit)
-LoginModule = require(paths.sievoLogin)
+phantomcss = require(paths.phantomCss)
+initmodule = require(paths.sievoInit)
+loginmodule = require(paths.sievoLogin)
 debug = require(paths.sievoDebug)
 
-openBudgeting = ()->
-      casper.click 'a[href$=Budgeting]'
-      casper.waitForText 'Manage budgets', (->
+casper.captureBudgetingMain = ->
+      @waitForText 'Manage budgets', ->
         phantomcss.screenshot '.budgetFrames', 'budget frames'
-      ), ->
-        casper.test.fail 'should see budget frames'
+      , -> @test.fail 'should see budget frames'
 
-createNewBudgetRound = ()->
-      casper.click '#label-year-2016 a'
-      casper.waitForText 'New budget round', (->
-        phantomcss.screenshot '#new-budgetround-panel', 'new budget round panel'
-      ), ->
-        casper.test.fail 'should see new budget round panel'
+casper.captureNewBudgetRound = ->
+      @waitForResource /w*dimensionsToExclude=Time\b/, ->
+          phantomcss.screenshot '#new-budgetround-panel', 'new budget round panel'
+      , -> @test.fail 'ajax request left hanging'
+
+casper.captureNewFrame = ->
+      @waitForText 'New budget frame', ->
+          phantomcss.screenshot '#new-budgetframe', 'new budget frame'
+      , -> @test.fail 'New budget frame wont open'
 
 casper.test.begin 'Budgeting visual tests', (test) ->
-    # @echo process.env.PWD
-    
-    new InitModule().init()
-    new LoginModule().login()
+    initmodule.init()
+    loginmodule.login()
     debug.enableClickListener()
 
-    casper.then ->
-      openBudgeting()
+    casper.then -> @click 'a[href$=Budgeting]'
+    casper.then -> @captureBudgetingMain()
+    casper.then -> @click '#label-year-2016 a'
+    casper.then -> @captureNewBudgetRound()
+    casper.back()
+    casper.then -> @click '#round-id-1 a'
+    casper.then -> @captureNewFrame()
 
-    casper.then ->
-      createNewBudgetRound()
-
-    casper.then ->
-       #compare screenshots
-       phantomcss.compareAll()
+    #casper.then -> phantomcss.compareAll()
+    casper.then -> phantomcss.compareSession()
 
     casper.run ->
       console.log '\nTHE END.'#
-      phantomcss.getExitStatus()
+      #phantomcss.getExitStatus()
       casper.test.done()
 

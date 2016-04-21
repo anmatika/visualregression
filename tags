@@ -1,0 +1,15 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+casper.captureBudgetingMain	.\sievo.budgeting.test.js	/^  casper.captureBudgetingMain = function() {$/;"	c
+casper.captureContractsEntry	.\sievo.contracts.test.js	/^  casper.captureContractsEntry = function() {$/;"	c
+casper.captureNewBudgetRound	.\sievo.budgeting.test.js	/^  casper.captureNewBudgetRound = function() {$/;"	c
+casper.captureNewFrame	.\sievo.budgeting.test.js	/^  casper.captureNewFrame = function() {$/;"	c
+exports.enableClickListener	.\common\sievo.debug.js	/^  exports.enableClickListener = function() {$/;"	f
+exports.init	.\common\sievo.init.js	/^  exports.init = function() {$/;"	f
+exports.login	.\common\sievo.login.js	/^  exports.login = function() {$/;"	f
+exports.phantomCss	.\common\sievo.module-paths.js	/^    phantomCss: "phantomcss",$/;"	p
+exports.sievoInit	.\common\sievo.module-paths.js	/^    sievoInit: fs.workingDirectory + '\/common\/sievo.init',$/;"	p
