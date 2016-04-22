@@ -1,33 +1,34 @@
 paths = require('./common/sievo.module-paths')
 phantomcss = require('phantomcss')
-initmodule = require(paths.sievoInit)
+settings = require(paths.sievoSettings)
 loginmodule = require(paths.sievoLogin)
 debug = require(paths.sievoDebug)
+sievo = require(paths.sievoCommon) 
 
 casper.captureContractsMain = ->
       @waitForResource /data:image\/png;base64/, ->
-         phantomcss.screenshot '#contracts-main-wrapper', 'contracts-main-wrapper'
+         sievo.screenshot '#contracts-main-wrapper', 'contracts-main-wrapper'
       , -> @test.fail 'should see contract management'
 
 casper.captureContractDetail = ->
       @waitForResource /Contracts\/Notification/, ->
-        phantomcss.screenshot '#content', 'contracts #content'
+        sievo.screenshot '#content', 'contracts #content'
       , -> @test.fail 'should see contract management'
 
 casper.captureEditContract = ->
       @waitForResource /dimension\/getEntitiesOnLevel/, ->
-        phantomcss.screenshot 'section[ng-controller="EditContractController as main"]', 'contracts editContractController'
+        sievo.screenshot 'section[ng-controller="EditContractController as main"]', 'contracts editContractController'
       , ->
         @test.fail 'should see edit contract'
 
 casper.captureTransferOwnership = ->
       @waitForResource /Contracts\/ContractDetail/, ->
-        phantomcss.screenshot 'section[ng-controller="TransferOwnershipController as main"]', 'contracts transferOwnership'
+        sievo.screenshot 'section[ng-controller="TransferOwnershipController as main"]', 'contracts transferOwnership'
       , ->
         @test.fail 'should see contract transfer ownership'
 
 casper.test.begin 'contracs visual tests', (test) ->
-    initmodule.init()
+    settings.init()
     loginmodule.login()
     debug.enableClickListener()
 

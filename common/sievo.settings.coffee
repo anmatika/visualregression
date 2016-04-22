@@ -18,6 +18,4 @@ exports.init = ->
     casper.on 'resource.error', (err) ->
        casper.log 'Resource load error: ' + err, 'warning'
 
-
-
-
+exports.screenshotDelay = 250

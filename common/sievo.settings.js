@@ -28,4 +28,6 @@
     });
   };
 
+  exports.screenshotDelay = 250;
+
 }).call(this);

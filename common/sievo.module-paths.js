@@ -2,7 +2,8 @@
 (function() {
   module.exports = {
     phantomCss: fs.workingDirectory + "/../../sievo.ppm/node_modules/phantomcss",
-    sievoInit: fs.workingDirectory + '/common/sievo.init',
+    sievoSettings: fs.workingDirectory + '/common/sievo.settings',
+    sievoCommon: fs.workingDirectory + '/common/sievo.common',
     sievoLogin: fs.workingDirectory + '/common/sievo.login',
     sievoDebug: fs.workingDirectory + '/common/sievo.debug'
   };
