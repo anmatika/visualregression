@@ -5,17 +5,14 @@ loginmodule = require(paths.sievoLogin)
 debug = require(paths.sievoDebug)
 
 casper.captureContractsMain = ->
-      @waitForResource /Contracts\/Notification/, ->
-        #have to wait a bit for slick grid rendering
-        @wait 100, -> phantomcss.screenshot '#contracts-main-wrapper', 'contracts-main-wrapper'
-      , ->
-        @test.fail 'should see contract management'
+      @waitForResource /data:image\/png;base64/, ->
+         phantomcss.screenshot '#contracts-main-wrapper', 'contracts-main-wrapper'
+      , -> @test.fail 'should see contract management'
 
 casper.captureContractDetail = ->
       @waitForResource /Contracts\/Notification/, ->
         phantomcss.screenshot '#content', 'contracts #content'
-      , ->
-        @test.fail 'should see contract management'
+      , -> @test.fail 'should see contract management'
 
 casper.captureEditContract = ->
       @waitForResource /dimension\/getEntitiesOnLevel/, ->
@@ -35,7 +32,7 @@ casper.test.begin 'contracs visual tests', (test) ->
     debug.enableClickListener()
 
     casper.then -> @click 'a[href$=Contracts]'
-    casper.then -> @captureContractsMain()
+    casper.wait 500, -> casper.then -> @captureContractsMain()
 
     casper.then -> @click '#contract0'
     casper.then -> @captureContractDetail()
@@ -52,4 +49,5 @@ casper.test.begin 'contracs visual tests', (test) ->
     casper.run ->
       console.log '\nTHE END.'#
       casper.test.done()
+      casper.test.renderResults(true, 0, 'test-results.xml')
 

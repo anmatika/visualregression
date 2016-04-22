@@ -13,10 +13,8 @@
   debug = require(paths.sievoDebug);
 
   casper.captureContractsMain = function() {
-    return this.waitForResource(/Contracts\/Notification/, function() {
-      return this.wait(100, function() {
-        return phantomcss.screenshot('#contracts-main-wrapper', 'contracts-main-wrapper');
-      });
+    return this.waitForResource(/data:image\/png;base64/, function() {
+      return phantomcss.screenshot('#contracts-main-wrapper', 'contracts-main-wrapper');
     }, function() {
       return this.test.fail('should see contract management');
     });
@@ -53,8 +51,10 @@
     casper.then(function() {
       return this.click('a[href$=Contracts]');
     });
-    casper.then(function() {
-      return this.captureContractsMain();
+    casper.wait(500, function() {
+      return casper.then(function() {
+        return this.captureContractsMain();
+      });
     });
     casper.then(function() {
       return this.click('#contract0');
@@ -84,7 +84,8 @@
     });
     return casper.run(function() {
       console.log('\nTHE END.');
-      return casper.test.done();
+      casper.test.done();
+      return casper.test.renderResults(true, 0, 'test-results.xml');
     });
   });
 
