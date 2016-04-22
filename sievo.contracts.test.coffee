@@ -6,7 +6,8 @@ debug = require(paths.sievoDebug)
 
 casper.captureContractsMain = ->
       @waitForResource /Contracts\/Notification/, ->
-        phantomcss.screenshot '#contracts-main-wrapper', 'contracts-main-wrapper'
+        #have to wait a bit for slick grid rendering
+        @wait 100, -> phantomcss.screenshot '#contracts-main-wrapper', 'contracts-main-wrapper'
       , ->
         @test.fail 'should see contract management'
 
@@ -16,11 +17,17 @@ casper.captureContractDetail = ->
       , ->
         @test.fail 'should see contract management'
 
-casper.captureEditContract = -> 
+casper.captureEditContract = ->
       @waitForResource /dimension\/getEntitiesOnLevel/, ->
         phantomcss.screenshot 'section[ng-controller="EditContractController as main"]', 'contracts editContractController'
       , ->
         @test.fail 'should see edit contract'
+
+casper.captureTransferOwnership = ->
+      @waitForResource /Contracts\/ContractDetail/, ->
+        phantomcss.screenshot 'section[ng-controller="TransferOwnershipController as main"]', 'contracts transferOwnership'
+      , ->
+        @test.fail 'should see contract transfer ownership'
 
 casper.test.begin 'contracs visual tests', (test) ->
     initmodule.init()
@@ -35,6 +42,10 @@ casper.test.begin 'contracs visual tests', (test) ->
 
     casper.then -> @click '#action-edit-contract'
     casper.then -> @captureEditContract()
+    casper.then -> @back()
+
+    casper.then -> @waitForText 'Contract details', -> @click '#action-transfer-ownership'
+    casper.then -> @captureTransferOwnership()
 
     casper.then -> phantomcss.compareSession()
 

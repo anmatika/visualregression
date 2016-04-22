@@ -14,7 +14,9 @@
 
   casper.captureContractsMain = function() {
     return this.waitForResource(/Contracts\/Notification/, function() {
-      return phantomcss.screenshot('#contracts-main-wrapper', 'contracts-main-wrapper');
+      return this.wait(100, function() {
+        return phantomcss.screenshot('#contracts-main-wrapper', 'contracts-main-wrapper');
+      });
     }, function() {
       return this.test.fail('should see contract management');
     });
@@ -33,6 +35,14 @@
       return phantomcss.screenshot('section[ng-controller="EditContractController as main"]', 'contracts editContractController');
     }, function() {
       return this.test.fail('should see edit contract');
+    });
+  };
+
+  casper.captureTransferOwnership = function() {
+    return this.waitForResource(/Contracts\/ContractDetail/, function() {
+      return phantomcss.screenshot('section[ng-controller="TransferOwnershipController as main"]', 'contracts transferOwnership');
+    }, function() {
+      return this.test.fail('should see contract transfer ownership');
     });
   };
 
@@ -57,6 +67,17 @@
     });
     casper.then(function() {
       return this.captureEditContract();
+    });
+    casper.then(function() {
+      return this.back();
+    });
+    casper.then(function() {
+      return this.waitForText('Contract details', function() {
+        return this.click('#action-transfer-ownership');
+      });
+    });
+    casper.then(function() {
+      return this.captureTransferOwnership();
     });
     casper.then(function() {
       return phantomcss.compareSession();
