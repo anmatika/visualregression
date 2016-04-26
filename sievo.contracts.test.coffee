@@ -3,34 +3,26 @@ phantomcss = require('phantomcss')
 settings = require(paths.sievoSettings)
 loginmodule = require(paths.sievoLogin)
 debug = require(paths.sievoDebug)
-sievo = require(paths.sievoCommon) 
+sievo = require(paths.sievoCommon)
 
-casper.captureContractsMain = ->
+casper.captureContractsMain = -> 
       @waitForResource /data:image\/png;base64/, ->
-         sievo.screenshot '#contracts-main-wrapper', 'contracts-main-wrapper'
-      , -> @test.fail 'should see contract management'
+        sievo.screenshot '#contracts-main-wrapper', 'contracts-main-wrapper', '.slick-headerrow'
 
 casper.captureContractDetail = ->
-      @waitForResource /Contracts\/Notification/, ->
-        sievo.screenshot '#content', 'contracts #content'
-      , -> @test.fail 'should see contract management'
-
+      @waitForResource /Contracts\/Notification/, -> sievo.screenshot '#content', 'contracts #content', '.attribute-value'
+      
 casper.captureEditContract = ->
-      @waitForResource /dimension\/getEntitiesOnLevel/, ->
-        sievo.screenshot 'section[ng-controller="EditContractController as main"]', 'contracts editContractController'
-      , ->
-        @test.fail 'should see edit contract'
+      @waitForResource /dimension\/getEntitiesOnLevel/, -> sievo.screenshot 'section[ng-controller="EditContractController as main"]', 'contracts editContractController'
 
 casper.captureTransferOwnership = ->
-      @waitForResource /Contracts\/ContractDetail/, ->
-        sievo.screenshot 'section[ng-controller="TransferOwnershipController as main"]', 'contracts transferOwnership'
-      , ->
-        @test.fail 'should see contract transfer ownership'
+      @wait 500
+      @waitForResource /Contracts\/ContractDetail/, -> sievo.screenshot 'section[ng-controller="TransferOwnershipController as main"]', 'contracts transferOwnership'
 
 casper.test.begin 'contracs visual tests', (test) ->
-    settings.init()
+    settings.init(screenshotDelay: 250)
     loginmodule.login()
-    debug.enableClickListener()
+    debug.enableHttpListeners()
 
     casper.then -> @click 'a[href$=Contracts]'
     casper.wait 500, -> casper.then -> @captureContractsMain()
@@ -48,7 +40,7 @@ casper.test.begin 'contracs visual tests', (test) ->
     casper.then -> phantomcss.compareSession()
 
     casper.run ->
-      console.log '\nTHE END.'#
+      console.log '\nTHE END.'
       casper.test.done()
       casper.test.renderResults(true, 0, 'test-results.xml')
 

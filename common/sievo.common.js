@@ -8,8 +8,9 @@
 
   settings = require(paths.sievoSettings);
 
-  exports.screenshot = function(selector, name) {
-    return phantomcss.screenshot(selector, settings.screenshotDelay, {}, name);
+  exports.screenshot = function(selector, name, ignoreSelector) {
+    casper.echo('taking screenshot, delay: ' + settings.screenshotDelay);
+    return phantomcss.screenshot(selector, settings.screenshotDelay, ignoreSelector, name);
   };
 
 }).call(this);

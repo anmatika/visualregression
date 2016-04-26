@@ -1,5 +1,5 @@
 module.exports = 
-    phantomCss: fs.workingDirectory + "/../../sievo.ppm/node_modules/phantomcss"
+    phantomCss: fs.workingDirectory + "/../../node_modules/phantomcss"
     sievoSettings: fs.workingDirectory + '/common/sievo.settings'
     sievoCommon: fs.workingDirectory + '/common/sievo.common'
     sievoLogin: fs.workingDirectory + '/common/sievo.login'

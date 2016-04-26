@@ -6,28 +6,31 @@
 
   phantomcss = require(paths.phantomCss);
 
-  exports.init = function() {
-    phantomcss.init({
+  exports.init = function(opts) {
+    var defaults, options;
+    defaults = {
+      screenshotDelay: 0,
+      baseUrl: casper.cli.options.baseUrl,
       libraryRoot: paths.phantomCss,
       screenshotRoot: fs.absolute(fs.workingDirectory + '/screenshots'),
       failedComparisonsRoot: fs.absolute(fs.workingDirectory + '/failures')
+    };
+    options = _.defaults(opts || {}, defaults);
+    phantomcss.init({
+      libraryRoot: options.libraryRoot,
+      screenshotRoot: options.screenshotRoot,
+      failedComparisonsRoot: options.failedComparisonsRoot
     });
-    casper.on('remote.message', function(msg) {
-      return this.echo('remote.message: ' + msg);
-    });
-    casper.on('step.complete', function(stepResult) {
-      if (stepResult) {
-        return this.echo(stepResult);
-      }
-    });
-    casper.on('error', function(err) {
-      return this.die('PhantomJS has errored: ' + err);
-    });
-    return casper.on('resource.error', function(err) {
-      return casper.log('Resource load error: ' + err, 'warning');
-    });
+    exports.screenshotDelay = options.screenshotDelay;
+    if (casper.cli.options.baseUrl != null) {
+      return exports.baseUrl = options.baseUrl;
+    } else {
+      return casper.echo("ERROR: baseUrl not given when starting casperjs. Check casper.ps1 script.");
+    }
   };
 
-  exports.screenshotDelay = 250;
+  casper.on('error', function(err) {
+    return this.die('PhantomJS has errored: ' + err);
+  });
 
 }).call(this);

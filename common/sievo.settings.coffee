@@ -1,21 +1,27 @@
 paths = require('./sievo.module-paths')
 phantomcss = require(paths.phantomCss)
 
-exports.init = ->
+exports.init = (opts) ->
+    
+    defaults =
+      screenshotDelay: 0
+      baseUrl: casper.cli.options.baseUrl
+      libraryRoot: paths.phantomCss
+      screenshotRoot: fs.absolute(fs.workingDirectory + '/screenshots')
+      failedComparisonsRoot: fs.absolute(fs.workingDirectory + '/failures')
+
+    options = _.defaults(opts || {}, defaults)
+
     phantomcss.init
-        libraryRoot: paths.phantomCss
-        screenshotRoot: fs.absolute(fs.workingDirectory + '/screenshots')
-        failedComparisonsRoot: fs.absolute(fs.workingDirectory + '/failures')
+        libraryRoot: options.libraryRoot
+        screenshotRoot: options.screenshotRoot
+        failedComparisonsRoot: options.failedComparisonsRoot
+   
+    exports.screenshotDelay = options.screenshotDelay
 
-    casper.on 'remote.message', (msg) -> @echo 'remote.message: ' + msg
-    casper.on 'step.complete', (stepResult) -> @echo stepResult if stepResult
-    #casper.on 'onComplete', (allTests, noOfFails, noOfErrors) ->
-      #allTests.forEach (test) ->
-        #console.log test.filename, test.mismatch if test.fail
+    if casper.cli.options.baseUrl?
+      exports.baseUrl = options.baseUrl
+    else
+      casper.echo "ERROR: baseUrl not given when starting casperjs. Check casper.ps1 script."
 
-    casper.on 'error', (err) -> @die 'PhantomJS has errored: ' + err
-    #casper.on 'resource.received', (r) -> @echo r
-    casper.on 'resource.error', (err) ->
-       casper.log 'Resource load error: ' + err, 'warning'
-
-exports.screenshotDelay = 250
+casper.on 'error', (err) -> @die 'PhantomJS has errored: ' + err

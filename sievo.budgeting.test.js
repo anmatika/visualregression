@@ -14,39 +14,47 @@
 
   sievo = require(paths.sievoCommon);
 
-  casper.captureBudgetingMain = function() {
+  casper.captureBudgetingMain = function(screenshotName) {
     return this.waitForText('Manage budgets', function() {
-      return sievo.screenshot('.budgetFrames', 'budget frames');
-    }, function() {
-      return this.test.fail('should see budget frames');
+      return sievo.screenshot('.budgetFrames', screenshotName);
     });
   };
 
   casper.captureNewBudgetRound = function() {
     return this.waitForResource(/w*dimensionsToExclude=Time\b/, function() {
       return sievo.screenshot('#new-budgetround-panel', 'new budget round panel');
-    }, function() {
-      return this.test.fail('ajax request left hanging');
     });
+  };
+
+  casper.createNewBudgetRound = function() {
+    this.fill('#createForm', {
+      'Description': 'Foo'
+    }, false);
+    return this.click('#createButton');
+  };
+
+  casper.createNewBudgetFrame = function() {
+    this.fill('#createForm', {
+      'Description': 'Bar'
+    }, false);
+    return this.click('#createButton');
   };
 
   casper.captureNewFrame = function() {
     return this.waitForText('New budget frame', function() {
       return sievo.screenshot('#new-budgetframe', 'new budget frame');
-    }, function() {
-      return this.test.fail('New budget frame wont open');
     });
   };
 
   casper.test.begin('Budgeting visual tests', function(test) {
     settings.init();
     loginmodule.login();
-    debug.enableClickListener();
+    debug.enableHttpListeners();
     casper.then(function() {
       return this.click('a[href$=Budgeting]');
     });
     casper.then(function() {
-      return this.captureBudgetingMain();
+      return this.captureBudgetingMain('budgeting main initial');
     });
     casper.then(function() {
       return this.click('#label-year-2016 a');
@@ -54,19 +62,36 @@
     casper.then(function() {
       return this.captureNewBudgetRound();
     });
-    casper.back();
     casper.then(function() {
-      return this.click('#round-id-1 a');
+      return this.createNewBudgetRound();
+    });
+    casper.then(function() {
+      return this.captureBudgetingMain('budgeting main - round added');
+    });
+    casper.then(function() {
+      return this.waitForSelector('#round-id-1', function() {
+        return this.click('#round-id-1 a');
+      });
     });
     casper.then(function() {
       return this.captureNewFrame();
+    });
+    casper.then(function() {
+      return this.createNewBudgetFrame();
+    });
+    casper.then(function() {
+      return this.click('#okButton');
+    });
+    casper.then(function() {
+      return this.captureBudgetingMain('budgeting main - frame added');
     });
     casper.then(function() {
       return phantomcss.compareSession();
     });
     return casper.run(function() {
       console.log('\nTHE END.');
-      return casper.test.done();
+      casper.test.done();
+      return casper.test.renderResults(true, 0, 'test-results.xml');
     });
   });
 
