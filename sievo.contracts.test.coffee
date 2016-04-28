@@ -5,9 +5,9 @@ loginmodule = require(paths.sievoLogin)
 debug = require(paths.sievoDebug)
 sievo = require(paths.sievoCommon)
 
-casper.captureContractsMain = -> 
+casper.captureContractsMain = ->
       @waitForResource /data:image\/png;base64/, ->
-        sievo.screenshot '#contracts-main-wrapper', 'contracts-main-wrapper', '.slick-headerrow'
+        sievo.screenshot '#contracts-main-wrapper', 'contracts-main-wrapper', '#pending-contracts'
 
 casper.captureContractDetail = ->
       @waitForResource /Contracts\/Notification/, -> sievo.screenshot '#content', 'contracts #content', '.attribute-value'

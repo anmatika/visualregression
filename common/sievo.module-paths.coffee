@@ -4,3 +4,4 @@ module.exports =
     sievoCommon: fs.workingDirectory + '/common/sievo.common'
     sievoLogin: fs.workingDirectory + '/common/sievo.login'
     sievoDebug: fs.workingDirectory + '/common/sievo.debug'
+    casperUtils: fs.workingDirectory + "/../../node_modules/casperjs/modules/utils"
