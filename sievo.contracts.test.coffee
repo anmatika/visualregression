@@ -42,5 +42,5 @@ casper.test.begin 'contracs visual tests', (test) ->
     casper.run ->
       console.log '\nTHE END.'
       casper.test.done()
-      casper.test.renderResults(true, 0, 'test-results.xml')
+      casper.test.renderResults(true, 0, 'test-results.contracts.xml')
 

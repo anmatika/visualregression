@@ -82,7 +82,7 @@
     return casper.run(function() {
       console.log('\nTHE END.');
       casper.test.done();
-      return casper.test.renderResults(true, 0, 'test-results.xml');
+      return casper.test.renderResults(true, 0, 'test-results.contracts.xml');
     });
   });
 

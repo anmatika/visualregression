@@ -2,7 +2,6 @@ paths = require('./common/sievo.module-paths')
 phantomcss = require(paths.phantomCss)
 settings = require(paths.sievoSettings)
 loginmodule = require(paths.sievoLogin)
-debug = require(paths.sievoDebug)
 sievo = require(paths.sievoCommon)
 
 casper.captureBudgetingMain = (screenshotName)->
@@ -25,7 +24,6 @@ casper.captureNewFrame = ->
 casper.test.begin 'Budgeting visual tests', (test) ->
     settings.init()
     loginmodule.login()
-    debug.enableHttpListeners()
 
     casper.then -> @click 'a[href$=Budgeting]'
     casper.then -> @captureBudgetingMain 'budgeting main initial'
@@ -44,4 +42,4 @@ casper.test.begin 'Budgeting visual tests', (test) ->
     casper.run ->
       console.log '\nTHE END.'
       casper.test.done()
-      casper.test.renderResults(true, 0, 'test-results.xml')
+      casper.test.renderResults(true, 0, 'test-results.budgeting.xml')
